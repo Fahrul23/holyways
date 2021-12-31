@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-    BrowserRouter,
     Routes,
     Route,
   } from "react-router-dom";
@@ -13,7 +12,6 @@ import RaiseFundForm from '../pages/RaiseFundForm';
 
 function Router() {
     return (
-        <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="profile" element={<Profile />} />
@@ -22,7 +20,6 @@ function Router() {
                 <Route path="raisefund" element={<RaiseFund />} />
                 <Route path="addraisefund" element={<RaiseFundForm />} />
             </Routes>
-        </BrowserRouter>
     )
 }
 

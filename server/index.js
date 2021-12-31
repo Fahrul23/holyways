@@ -6,7 +6,7 @@ const cors = require('cors')
 const PORT = process.env.PORT 
 
 app.use(express.json())
-app.user(cors())
+app.use(cors())
 
 app.use('/api/v1', Routes)
 app.use('/uploads', express.static('uploads'))

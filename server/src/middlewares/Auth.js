@@ -6,7 +6,7 @@ exports.Auth = async (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1]
 
     if(!token) {
-        res.status(400).send({
+        return res.status(400).send({
             status: "failed",
             message: "Access Denied"
         })
@@ -14,8 +14,8 @@ exports.Auth = async (req, res, next) => {
 
     try {
         const verified = jwt.verify(token, process.env.API_KEY)
-        res.user = verified
-        next();
+        req.user = verified
+        return next();
 
     } catch (error) {
         res.status(400).send({

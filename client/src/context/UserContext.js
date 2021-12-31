@@ -10,21 +10,30 @@ const initialState = {
 const reducer = (state,action) => {
     const {type, payload} = action
     
-    if(type === 'LOGIN_SUCCESS'){
-        return {
-            isLogin:true,
-            user: payload
-        }
-    }else if(type === 'REGISTER_SUCCESS'){
-        return {
-            isLogin:true,
-            user: payload
-        }
-    }else if(type === 'LOGOUT'){
-        return {
-            isLogin: false,
-            user:[]
-        }
+    switch (type) {
+        case "LOGIN_SUCCESS":
+        case "REGISTER_SUCCESS":
+            localStorage.setItem("token", payload.user.token);
+            return {
+                isLogin: true,
+                user: payload,
+            };
+        
+        case "USER_SUCCESS":
+            localStorage.setItem("token", payload.token);
+            return {
+                isLogin: true,
+                user: payload,
+            };
+        case "AUTH_ERROR":
+        case "LOGOUT":
+            localStorage.removeItem("token");
+            return {
+                isLogin: false,
+                user: {},
+            };
+        default:
+            throw new Error();
     }
 }
 
