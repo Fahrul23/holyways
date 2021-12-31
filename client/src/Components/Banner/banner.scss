@@ -1,0 +1,48 @@
+.banner {
+    display: flex;
+    padding-top: 120px;
+    padding-left: 158px;
+    box-sizing: border-box;
+    background-color: #C32424;
+    width: 100%;
+    height: 100%;
+    .banner-content {
+        flex: 1;
+        h2 {
+            font-size: 43px;
+            font-weight: bold;
+            line-height: 58px;
+            color: #E8E8E8;
+            width: 670px;
+        }
+        p {
+            width: 545px;
+            font-size: 18px;
+            line-height: 25px;
+            color: #E8E8E8;
+            margin-bottom: 47px;
+        }
+        button {
+            padding: 11px 46px;
+            margin-bottom:155px;
+        }
+    }
+    .banner-image {
+        position: absolute;
+        right: 0;
+        top:150px;
+        .card-banner-image {
+            width: 485px;
+            height: 645px;
+            position: relative;
+            overflow: hidden;
+            img {
+                width: 100%;
+                height: 100%;
+                max-width: inherit;
+                position: absolute;
+            }
+        }
+    }
+
+}

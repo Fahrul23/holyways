@@ -1,0 +1,111 @@
+.navbar {
+    width: 100%;
+    display: flex;
+    background-color: #C32424;
+    height: 85px;
+    z-index: 100;
+    position: fixed;
+
+    .logo {
+        box-sizing: border-box;
+        padding: 20px 100px;
+        flex: 1;
+        img {
+            width: 65px;
+            height: 45.39px;
+            
+        }
+    }
+    .nav-item {
+        flex: 1;
+        padding-right: 100px;
+        .auth, .avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+
+            img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border: 2px solid #ffff;
+                cursor: pointer;
+            }
+        }
+    }
+    .dropdown-wrapper {
+        position: absolute;
+        right: 105px;
+        top: 75px;
+        display: none;
+        transition: ease-in-out 0.4s;
+        .dropdown {
+            padding: 0;
+            .triangle-wrapper {
+                display: flex;
+                justify-content: flex-end;
+                padding-right: 15px;
+                .triangle {
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 0 10px 20px 10px;
+                    border-color: transparent transparent #ffffff transparent;
+                }
+            }
+
+            .item-wrapper {
+                width: 220px;
+                height: 215px;
+                background-color: #ffffff;
+                box-sizing: border-box;
+                border-radius: 10px;
+                padding-top: 20px;
+                box-sizing: border-box;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 4px 4px 20px rgba(0, 0, 0, 0.25);
+                .item {
+                    display: flex;
+                    align-items: center;
+                    padding-left: 27px;
+                    cursor: pointer;
+                    .icon {
+                        width: 20px;
+                        height: 20px;
+                        position: relative;
+                        img {
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    p {
+                        font-size: 16px;
+                        font-weight: 800;
+                        color: #000000;
+                        margin-left: 20px;
+                    }
+                    a {
+                        text-decoration: none;
+                    }
+                }
+                .item:hover {
+                    p {
+                        color: #C32424;
+                    }
+                }
+            }
+            .line {
+                width: 100%;
+                margin-bottom: 10px;
+                height: 3px;
+                background-color:  #A8A8A8;
+            }
+        }
+    }
+    .active {
+        display: block;
+    }
+}

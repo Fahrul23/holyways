@@ -1,0 +1,151 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #E5E5E5;
+    position: relative;
+}
+
+.navbar {
+    width: 100%;
+    display: flex;
+    background-color: #C32424;
+    height: 85px;
+    position: fixed;
+    z-index: 1000;
+
+    .logo {
+        box-sizing: border-box;
+        padding: 20px 100px;
+        flex: 1;
+        img {
+            width: 65px;
+            height: 45.39px;
+            
+        }
+    }
+    .nav-item {
+        flex: 1;
+        padding-right: 100px;
+        .auth, .avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+
+            img {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                border: 2px solid #ffff;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.detail-donate {
+    display: flex;
+    width: 100%;
+    padding-top: 164px;
+    padding-left: 175px;
+    box-sizing: border-box;
+    .detail-donate-image {
+        width: 560px;
+        height: 510px;
+        position: relative;
+        overflow: hidden;
+        img {
+            width: 100%;
+            height: 100%;
+            max-width: inherit;
+        }
+    }
+    .card-donate-content {
+        padding: 0;
+        width: 430px;
+        height: 100%;
+        margin-left: 84px;
+
+        h2 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: bold;
+            color: #000000;
+        }
+        .card-content {
+            padding-top: 30px;
+            .price-donate {
+                display: flex;
+                align-items: center;
+                p {
+                    margin-right: 13px;
+                }
+                .start {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #C32424;
+                }
+                .gathered {
+                    font-size: 14px;
+                    font-weight: normal;
+                    color: #616161;
+                }
+                .end {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #616161;
+                }
+            }
+            .card-progres {
+                padding-right: 60px;
+                .progres-bar {
+                    background: #f0f0f0;
+                    height: 5px;
+                    width: 100%;
+                    border-radius: 10px;
+                }
+                .bar {
+                    background: #C32424;
+                    height: 6px;
+                    border-radius: 10px;
+                    width: 50%;
+                }
+            }
+            .donate-info {
+                display: flex;
+                justify-content: space-between;
+                padding-right: 60px;
+                p {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #000000;
+                    span {
+                        font-size: 13px;
+                        font-weight: normal;
+                        color: #616161;
+                    }
+                }
+            }
+            .donate-desc {
+                font-size: 18px;
+                font-weight: normal;
+                line-height: 25px;
+                color: #616161;
+            }
+            button {
+                margin-top: 30px;
+            }
+        }
+    }
+}
+.list-donate {
+    padding-left: 175px;
+    padding-top: 35px;
+    h2 {
+        font-size: 36px;
+        font-weight: bold;
+        color: #000000;
+    }
+}

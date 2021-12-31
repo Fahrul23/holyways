@@ -1,0 +1,29 @@
+.donate-card-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 34px;
+    width: 1045px;
+    height: 101px;
+    background-color: #FFFFFF;
+    margin-bottom: 15px;
+    .donate-status-item {
+        .name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000000;
+            line-height: 17px;
+        }
+        .time {
+            font-size: 9px;
+            font-weight: 900;
+            color: #000000;
+        }
+        .total {
+            font-size: 10px;
+            font-weight: 900;
+            color: #974A4A;
+        }
+    }
+}

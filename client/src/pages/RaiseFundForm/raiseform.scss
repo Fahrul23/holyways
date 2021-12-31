@@ -1,0 +1,43 @@
+.form-wrapper {
+
+    button[type=submit] {
+        margin-top: 50px;
+        float: right;
+        padding-left: 130px;
+        padding-right: 130px;
+    }
+}
+input[type=file] {
+    display: none;
+    padding: 0;
+}
+.custom-file-upload {
+    color: #FFFFFF;
+    background-color: #C32424;
+    display: inline-block;
+    font-size: 14px;
+    padding: 0 23px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: 0.4s;
+    p {
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
+}
+.image-preview {
+    width: 170px;
+    height: 170px;
+    background-color: #ffff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+}
