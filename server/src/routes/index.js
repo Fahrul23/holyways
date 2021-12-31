@@ -1,5 +1,5 @@
 const express = require('express');
-const{ Login, Register } = require('../controllers/Auth');
+const{ Login, Register, checkAuth } = require('../controllers/Auth');
 const { addUserDonate, addFund, editFund, deleteFund, editDonateFund, getFunds, detailFund } = require('../controllers/Fund');
 const {getUsers, deleteUser} = require('../controllers/User');
 const {Auth} = require('../middlewares/Auth')
@@ -8,6 +8,7 @@ const router = express.Router()
 
 
 // Auth
+router.get('/check-auth',Auth, checkAuth)
 router.post('/login', Login)
 router.post('/register', Register)
 

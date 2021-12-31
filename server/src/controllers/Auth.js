@@ -117,3 +117,40 @@ exports.Register = async (req, res) => {
     }
     
 }
+exports.checkAuth = async (req, res) => {
+    try {
+        const id = req.user.id;
+        console.log("HASIL ID ID ===", id)
+  
+        const dataUser = await user.findOne({
+            where: { id },
+            attributes: {
+                exclude: ["createdAt", "updatedAt", "password"],
+            },
+        });
+  
+        if (!dataUser) {
+            return res.status(404).send({
+            status: "failed",
+            });
+        }
+  
+        res.status(200).send({
+            status: "success...",
+            data: {
+                user: {
+                    id: dataUser.id,
+                    name: dataUser.fullName,
+                    email: dataUser.email,
+                },
+            },
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            status: "failed",
+            message: "internal server error"
+        })
+    }
+  };
+  

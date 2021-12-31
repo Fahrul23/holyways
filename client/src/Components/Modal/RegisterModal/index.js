@@ -3,8 +3,10 @@ import Modal from 'react-modal';
 import propTypes from "prop-types";
 import Input from '../../Input';
 import Button from '../../Button';
+import Alert from '../../Alert';
 import './registermodal.scss';
 import { UserContext } from '../../../context/UserContext';
+import { API } from '../../../config/api';
 
 const modalStyles = { 
     overlay :{
@@ -26,19 +28,46 @@ const modalStyles = {
 
 function RegisterModal(props) {
     const {isOpen, closeModal, showModalLogin} = props
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [fullName, setFullName] = useState('')
-
     const [, dispatch] = useContext(UserContext)
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const data = {email,password,fullName}
-        dispatch({
-            type: 'REGISTER_SUCCESS',
-            payload: data
+    const [message, setMessage] = useState("")
+    const [form, setForm] = useState({
+        email: "",
+        password: "",
+        fullName: ""
+    });
+    const handleChange = (e) => {
+        setForm({
+            ...form,
+            [e.target.name] : e.target.value
         })
+        console.log(form)
+    }
+
+    const handleSubmit = async (e) => {
+       
+        try {
+            e.preventDefault()
+            const config = {
+                Headers: {
+                    "Content-type" : "aplication/json"
+                }
+            }
+            let response = await API.post('/register', form, config)
+            if(response.status === 201){
+                console.log(response.data.data)
+                dispatch({
+                    type: 'REGISTER_SUCCESS',
+                    payload: response.data.data
+                })
+                closeModal()
+            }else if(response.status === 400){
+                console.log(response)            
+            }
+
+        } catch (error) {
+            console.log(error.message)
+            setMessage("Register Failed")
+        }
     }
     const toLogin = () => {
         closeModal()
@@ -47,12 +76,28 @@ function RegisterModal(props) {
  
     return (
         <Modal isOpen={isOpen} onRequestClose={() => closeModal()} style={modalStyles}>
+            {message ? <Alert message={message}/> : <div></div>}
             <div className="login-wrapper">
                 <h2>Register</h2>
                 <form onSubmit={handleSubmit}>
-                    <Input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-                    <Input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
-                    <Input type="text" placeholder="Full Name" onChange={(e) => setFullName(e.target.value)}/>
+                    <Input 
+                        type="email"
+                        name="email" 
+                        placeholder="Email" 
+                        onChange={handleChange}
+                    />
+                    <Input 
+                        type="password"
+                        name="password" 
+                        placeholder="Password" 
+                        onChange={handleChange}    
+                    />
+                    <Input 
+                        type="text" 
+                        name="fullName"
+                        placeholder="Full Name" 
+                        onChange={handleChange}
+                    />
                     <div className="button-submit">
                         <Button type="submit" className="btn btn-full btn-orange" text="Register"/>
                     </div>

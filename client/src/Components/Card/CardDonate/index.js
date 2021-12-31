@@ -9,7 +9,7 @@ function CardDonate(props) {
     return (
         <div className="card-donate">
             <div className="card-donate-image">
-                <img src={image} alt="donate" />
+                <img src={`http://localhost:5000/uploads/${image}`} alt="donate" />
             </div>
             <div className="card-title">
                 <Link to="/detail">

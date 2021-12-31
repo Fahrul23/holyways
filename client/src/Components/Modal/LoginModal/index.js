@@ -5,6 +5,8 @@ import Input from '../../Input'
 import Button from '../../Button'
 import './loginmodal.scss';
 import { UserContext } from '../../../context/UserContext';
+import Alert from '../../Alert';
+import { API } from '../../../config/api';
 
 const modalStyles = { 
     overlay :{
@@ -26,17 +28,45 @@ const modalStyles = {
 
 function LoginModal(props) {
     const {showModalRegister, isOpen, closeModal} = props
-    const [email, setEmail] = useState('')
+    const [message, setMessage] = useState('')
     const [password, setPassword] = useState('')
+    const [form, setForm] = useState({
+        email: "",
+        password: "",
+       
+    });
     const [, dispatch] = useContext(UserContext)
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const data = {email,password}
-        dispatch({
-            type: 'LOGIN_SUCCESS',
-            payload: data
+    const handleChange = (e) => {
+        setForm({
+            ...form,
+            [e.target.name] : e.target.value
         })
+        console.log(form)
+    }
+    const handleSubmit = async (e) => {
+        try {
+            e.preventDefault()
+
+            const config = {
+                Headers: {
+                    "Content-type" : "aplication/json"
+                }
+            }
+            
+            let response = await API.post('/login', form, config)
+
+            if(response.status === 200){        
+                dispatch({
+                    type: 'LOGIN_SUCCESS',
+                    payload: response.data.data
+                })
+                closeModal()
+            }
+
+        } catch (error) {
+            setMessage("Login Failed")
+        }
     }
     const toRegister = () => {
         closeModal()
@@ -44,11 +74,21 @@ function LoginModal(props) {
     }
     return (
         <Modal isOpen={isOpen} onRequestClose={() => closeModal()} style={modalStyles}>
+            {message ? <Alert message={message}/> : <div></div>}
             <div className="login-wrapper">
                 <h2>Login</h2>
                 <form onSubmit={handleSubmit}>
-                    <Input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-                    <Input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                    <Input 
+                        type="email" 
+                        name="email"
+                        placeholder="Email" 
+                        onChange={handleChange}/>
+                    <Input 
+                        type="password"
+                        name="password" 
+                        placeholder="Password" 
+                        onChange={handleChange}
+                    />
                     <div className="button-submit">
                         <Button type="submit" className="btn btn-full btn-orange" text="Login"/>
                     </div>
