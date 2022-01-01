@@ -3,12 +3,20 @@ import './cardStatus.scss'
 import propTypes from "prop-types";
 
 const CardStatusDonate = (props) => {
+    const convertDate = (date) =>{
+
+        const dateObject = new Date(date)
+        const dateFormat = dateObject.toLocaleString('en-GB', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+
+        return dateFormat;
+    }
+
     const {showModal, isButton, name, date, total} = props
     return (
         <div className="donate-card-status">
             <div className="donate-status-item">
                 <p className="name">{name}</p>
-                <p className="time">Saturday. <span>{date}</span></p>
+                <p className="time"><span>{convertDate(date)}</span></p>
                 <p className="total">Total : Rp {total}</p>
             </div>
             {isButton === true && (
