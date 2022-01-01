@@ -75,7 +75,7 @@ exports.detailFund = async (req, res) => {
                         model: userDonate,
                         as: "userDonate",
                         attributes: {
-                            exclude: ['userId','fundId','createdAt', 'updatedAt']
+                            exclude: ['userId','fundId', 'updatedAt']
                         },
                       },     
                     attributes: {
@@ -110,7 +110,8 @@ exports.detailFund = async (req, res) => {
                 email: user.email,
                 donateAmount: user.userDonate.donateAmount,
                 status: user.userDonate.status,
-                proofAttachment: user.userDonate.proofAttachment
+                proofAttachment: user.userDonate.proofAttachment,
+                date: user.userDonate.createdAt
             })
         })
         res.status(200).send({
