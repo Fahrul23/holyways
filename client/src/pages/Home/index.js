@@ -3,19 +3,41 @@ import Navbar from '../../Components/Navbar'
 import './home.scss';
 import bannerImg from '../../assets/image/banner-2.png'
 import CardDonate from '../../Components/Card/CardDonate';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import donateData from '../../Components/DummyData/DonateData';
+import { API } from '../../config/api';
 
 
 function Home() {
     const refDonate = useRef()
+    const [dataFund, setDataFund] = useState([])
+    
+    const config = {
+        Headers: {
+            "Content-type" : "aplication/json"
+        }
+    }
 
+    // const getFunds = async () => {
+    //     let response = await API.get('funds', config)
+    //     setDataFund(response.data.data)
+    // }
+    
     const showDonate = () => {
         window.scrollTo({
             top: refDonate.current.offsetTop - 100,
             behavior: "smooth"
         });
     }
+
+    useEffect(() => {
+        const getFunds = async () => {
+            let response = await API.get('funds', config)
+            setDataFund(response.data.data.funds)
+        }
+        getFunds()
+    }, [dataFund])
+
     return (
         <div>
             <Navbar />
@@ -36,17 +58,21 @@ function Home() {
                 <div className="donate"ref={refDonate}>
                     <h3>Donate Now</h3> 
                     <div className="donate-content">
-                        {donateData.map((data,index) => (
-                            <CardDonate 
-                                key={index}
-                                title={data.title}
-                                description={data.description}
-                                price={data.price}
-                                image={data.image}
-                                button="Donate"
-                                link="/detail"
-                            />
-                        ))}
+                        {dataFund && 
+                        dataFund.map((data,index) => {
+                                return (
+                                    <CardDonate 
+                                        key={index}
+                                        title={data.title}
+                                        description={data.description}
+                                        price={data.goal}
+                                        image={data.thumbnail}
+                                        button="Donate"
+                                        link="/detail"
+                                    />
+                                )
+                            })
+                        }
                     </div>
                 </div>
             </div>
