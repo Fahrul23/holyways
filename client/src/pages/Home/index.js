@@ -17,12 +17,12 @@ function Home() {
             "Content-type" : "aplication/json"
         }
     }
-
-    // const getFunds = async () => {
-    //     let response = await API.get('funds', config)
-    //     setDataFund(response.data.data)
-    // }
     
+    const getFunds = async () => {
+        let response = await API.get('funds', config)
+        setDataFund(response.data.data.funds)
+    }
+
     const showDonate = () => {
         window.scrollTo({
             top: refDonate.current.offsetTop - 100,
@@ -31,12 +31,8 @@ function Home() {
     }
 
     useEffect(() => {
-        const getFunds = async () => {
-            let response = await API.get('funds', config)
-            setDataFund(response.data.data.funds)
-        }
         getFunds()
-    }, [dataFund])
+    }, [])
 
     return (
         <div>
@@ -68,7 +64,7 @@ function Home() {
                                         price={data.goal}
                                         image={data.thumbnail}
                                         button="Donate"
-                                        link="/detail"
+                                        link={`/detail/${data.id}`}
                                     />
                                 )
                             })

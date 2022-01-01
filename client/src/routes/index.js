@@ -15,7 +15,7 @@ function Router() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="profile" element={<Profile />} />
-                <Route path="detail" element={<Detail />} />
+                <Route path="detail/:id" element={<Detail />} />
                 <Route path="donatefund" element={<DonateFund />} />
                 <Route path="raisefund" element={<RaiseFund />} />
                 <Route path="addraisefund" element={<RaiseFundForm />} />
