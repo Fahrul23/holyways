@@ -32,7 +32,6 @@ const Detail = () => {
 
     useEffect(() => {
         detailFund()
-        console.log("DataFund=====", dataFund)
     }, [])
 
     return (
