@@ -1,17 +1,22 @@
+import { useEffect, useState } from 'react';
 import Navbar from '../../Components/Navbar'
 import DonateImg from '../../assets/image/donate-1.png';
 import CardStatusDonate from '../../Components/Card/CardStatusDonate';
-import './donatefund.scss';
-import '../Detail/detail.scss';
-import { useState } from 'react';
 import ApproveModal from '../../Components/Modal/ApproveModal';
 import DonateModal from '../../Components/Modal/DonateModal';
 import ListDonate from '../../Components/DummyData/ListDonate';
+import { useParams } from 'react-router-dom';
+import { API } from '../../config/api';
+import './donatefund.scss';
+import '../Detail/detail.scss';
 
 const DonateFund = () => {
     const [modalApprove, setModalApprove] = useState(false)
     const [modalDonate, setModalDonate] = useState(false)
-    
+    const [dataFund, setDataFund] = useState([])
+
+    const {id} = useParams()
+
     const closeModalApprove = () => {
         setModalApprove(false)
     }
@@ -24,20 +29,36 @@ const DonateFund = () => {
     const showModalDonate = () => {
         setModalDonate(true)
     }
+
+    const config = {
+        Headers :{
+            "Content-type" : "aplication/json"
+        }
+    }
+
+    const detailFund =async () => {
+        const response = await API.get(`/fund/${id}`, config)
+        setDataFund(response.data.data.fund)
+    }
+
+    useEffect(() => {
+        detailFund()
+    }, [])
+
     return (
         <div>
             <Navbar />
             <div className="detail-donate">
                 <div className="detail-donate-image">
-                    <img src={DonateImg} alt="detail-donate" />
+                    <img src={`http://localhost:5000/uploads/${dataFund.thumbnail}`} alt="detail-donate" />
                 </div>
                 <div className="card-donate-content">
-                    <h2>The Strength of a People. Power of Community</h2>
+                    <h2>{dataFund.title}</h2>
                     <div className="card-content">
                         <div className="price-donate">
-                            <p className="start">Rp. 25.000.000</p>
+                            <p className="start">Rp. 200.000</p>
                             <p className="gathered">gathered from</p>
-                            <p className="end">Rp. 200.000.000</p>
+                            <p className="end">Rp. {dataFund.goal}</p>
                         </div>
                         <div className="card-progres">
                             <div className="progres-bar">
@@ -49,7 +70,7 @@ const DonateFund = () => {
                             <p>150 <span>More Day</span></p>
                         </div>
                         <div className="donate-desc">
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+                            <p>{dataFund.description}</p>
                         </div>
                         <button onClick={() => showModalDonate()} className="btn btn-full btn-orange">Donate</button>
                     </div>
@@ -75,7 +96,7 @@ const DonateFund = () => {
                     <CardStatusDonate 
                         key={index}
                         showModal={showModalApprove} 
-                        isButton={true}
+                        isButton={false}
                         name={data.name}
                         date={data.date}
                         total={data.total}
