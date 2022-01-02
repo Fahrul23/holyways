@@ -351,6 +351,8 @@ exports.addUserDonate = async( req, res) => {
     const {fundId, userId} = req.params
     const data = req.body
     const schema = Joi.object({
+        fundId: Joi.number().required(),
+        userId: Joi.number().required(),
         donateAmount: Joi.number().min(3).required(),
     })
     const {error} = schema.validate(data)

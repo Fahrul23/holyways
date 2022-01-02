@@ -12,7 +12,7 @@ function CardDonate(props) {
                 <img src={`http://localhost:5000/uploads/${image}`} alt="donate" />
             </div>
             <div className="card-title">
-                <Link to="/detail">
+                <Link to={link}>
                     <p>{title}</p>
                 </Link>
             </div>
@@ -29,9 +29,7 @@ function CardDonate(props) {
                     <h4>RP. {price}</h4>
                 </div>
                 <div className="action">
-                    <Link to={link}>
-                        <Button className="btn btn-small btn-orange" text={button} />
-                    </Link>
+                    <Button className="btn btn-small btn-orange" text={button} />
                 </div>
             </div>
         </div>
