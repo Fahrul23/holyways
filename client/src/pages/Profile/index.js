@@ -22,7 +22,7 @@ const Profile = () => {
                         <div className="profile-item">
                             <div className="item">
                                 <p className="label">Full Name</p>
-                                <p className="text">{state.user.fullName}</p>
+                                <p className="text">{state.user.name}</p>
                             </div>
                             <div className="item">
                                 <p className="label">Email</p>

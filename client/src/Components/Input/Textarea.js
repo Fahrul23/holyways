@@ -1,9 +1,9 @@
 import React from 'react'
 import './textarea.scss'
 
-function Textarea({placeholder}) {
+function Textarea({...rest}) {
     return (
-        <textarea placeholder={placeholder}></textarea>
+        <textarea {...rest}></textarea>
     )
 }
 

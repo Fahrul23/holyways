@@ -56,13 +56,13 @@ function DonateModal(props) {
                 }
             }
             const formData = new FormData()
-            formData.set("fundId",fundId)
-            formData.set("userId",userId)
+            formData.set("fundId",parseInt(fundId))
+            formData.set("userId", parseInt(userId))
             formData.set("donateAmount", form.donateAmount)
             formData.set("proofAttachment", form.proofAttachment[0], form.proofAttachment[0].name)
 
       
-            const response = await API.post(`fund/1/1`,formData,config)
+            const response = await API.post(`fund/${fundId}/${userId}`,formData,config)
             console.log(response)
             closeModal()
 
@@ -115,8 +115,6 @@ function DonateModal(props) {
                       height: "150px",
                       marginTop: -60,
                       marginBottom: 17
-                    //   position: "absolute",
-                    //   bottom:80,
                     }}
                     alt="preview"
                   />

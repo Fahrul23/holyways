@@ -1,8 +1,9 @@
 .wrapper {
-    padding: 130px 197px;
+    padding: 130px 160px;
     .header-wrapper {
         display: flex;
         justify-content: space-between;
+        padding-right: 20px;
         align-items: center;    
         h2 {
             font-size: 36px;
@@ -12,7 +13,7 @@
     }
     .list-raise-funds {
         display: flex;
-        justify-content: space-between;
-        gap: 25px;
+        flex-wrap: wrap;
+        gap: 20px;
     }
 }
