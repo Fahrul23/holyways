@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Navbar from '../../Components/Navbar'
 import './detail.scss';
 import DonateImg from '../../assets/image/donate-1.png';
@@ -8,11 +8,14 @@ import Button from '../../Components/Button';
 import ListDonate from '../../Components/DummyData/ListDonate';
 import { useParams } from 'react-router-dom';
 import { API } from '../../config/api';
+import { UserContext } from '../../context/UserContext';
 
 const Detail = () => {
     const [modalDonate, setModalDonate] = useState(false)
     
     const [dataFund, setDataFund] = useState([])
+    const [state] = useContext(UserContext)
+
 
     const {id} = useParams()
     const closeModalDonate = () => {
@@ -66,7 +69,12 @@ const Detail = () => {
                             text="Donate" 
                             onClick={() => setModalDonate(true)}
                             />
-                        <DonateModal isOpen={modalDonate} closeModal={closeModalDonate} />
+                        <DonateModal 
+                            isOpen={modalDonate} 
+                            closeModal={closeModalDonate} 
+                            fundId={dataFund.id}
+                            userId={state.user.id}
+                        />
                     </div>
                 </div>
             </div>
