@@ -1,4 +1,4 @@
-const { fund, userDonate, user } = require('../../models/index')
+const { fund, userDonate, userFund, user } = require('../../models/index')
 const Joi = require('joi')
 
 exports.getFunds = async (req, res) => {
@@ -6,50 +6,45 @@ exports.getFunds = async (req, res) => {
         const data = await fund.findAll({            
             include: [
                 {
-                    model: user,
-                    as: "users",  
-                    through: {
-                        model: userDonate,
-                        as: "userDonate",
-                        attributes: {
-                            exclude: ['userId','fundId','createdAt', 'updatedAt']
-                        },
-                      },     
-                    attributes: {
-                        exclude: ['password','createdAt', 'updatedAt']
-                    }
+                    model: userDonate,
+                    as: "userDonate",
+                    include : [{
+                        model: user,
+                        as: "user",  
+                    }]
                 }
             ],
             attributes: {
                 exclude: ['createdAt', 'updatedAt']
             }
         })
-        let resData = []
-        data.map(item => {
+
+        let restData =[]
+        data.map(fund => {
             let dataFund = {
-                id: item.id,
-                title: item.title,
-                thumbnail: item.thumbnail,
-                goal: item.goal,
-                description: item.description,
+                id: fund.id,
+                title: fund.title,
+                thumbnail: fund.thumbnail,
+                goal: fund.goal,
+                description: fund.description,
                 usersDonate: []
             };
-            item.users.map(user => {
+            fund.userDonate.map(donate => {
                 dataFund.usersDonate.push({
-                        id: user.id,
-                        fullName: user.fullName,
-                        email: user.email,
-                        donateAmount: user.userDonate.donateAmount,
-                        status: user.userDonate.status,
-                        proofAttachment: user.userDonate.proofAttachment
-                    }
-                )
+                    id: donate.id,
+                    fullName: donate.user.fullName,
+                    email: donate.user.email,
+                    donateAmount: donate.donateAmount,
+                    status: donate.status,
+                    proofAttachment: donate.proofAttachment
+                })
             })
-            resData.push(dataFund)
+            restData.push(dataFund)
         })
+        
         res.status(200).send({
             status: "success",
-            data: { 'funds': resData }
+            data: { 'funds': restData }
         });
 
     } catch (error) {
@@ -61,25 +56,17 @@ exports.getFunds = async (req, res) => {
     }
 }
 
-exports.detailFund = async (req, res) => {
-    const {id} = req.params
-
+exports.getFundsByUserId =async (req, res) => {
+    const {userId} = req.params
     try {
-        const data = await fund.findOne({            
-            where: {id},
+        const data = await user.findOne({
+            where: {id: userId},            
             include: [
                 {
-                    model: user,
-                    as: "users", 
-                    through: {
-                        model: userDonate,
-                        as: "userDonate",
-                        attributes: {
-                            exclude: ['userId','fundId', 'updatedAt']
-                        },
-                      },     
+                    model: fund,
+                    as: "funds",
                     attributes: {
-                        exclude: ['password','createdAt', 'updatedAt']
+                        exclude: ['createdAt', 'updatedAt']
                     }
                 }
             ],
@@ -91,42 +78,22 @@ exports.detailFund = async (req, res) => {
         if(!data) {
             return res.status(404).send({
                 status: "failed",
-                message: "fund not found",
+                message: "user not found"
             })
         }
 
-        let dataFund = {
-            id: data.id,
-            title: data.title,
-            thumbnail: data.thumbnail,
-            goal: data.goal,
-            description: data.description,
-            usersDonate: []
-        };
-        data.users.map(user => {
-            dataFund.usersDonate.push({
-                id: user.id,
-                fullName: user.fullName,
-                email: user.email,
-                donateAmount: user.userDonate.donateAmount,
-                status: user.userDonate.status,
-                proofAttachment: user.userDonate.proofAttachment,
-                date: user.userDonate.createdAt
-            })
-        })
         res.status(200).send({
             status: "success",
-            data: {fund: dataFund}
-        }); 
-         
+            data: data.funds
+        });
+
     } catch (error) {
         console.log(error)
         res.status(500).send({
             status: "error",
             message: "internal server error"
         })
-    }
-
+    }   
 }
 
 exports.addFund = async (req, res) => {
@@ -144,12 +111,19 @@ exports.addFund = async (req, res) => {
             message: error.details[0].message
         })
     }
+    
+
     try {
         const newfund = await fund.create({
-            title: data.title,
-            goal: data.goal,
-            description: data.description,
+            title: req.body.title,
+            goal: req.body.goal,
+            description: req.body.description,
             thumbnail: req.file.filename
+        })
+
+        await userFund.create({
+            userId: req.user.id,
+            fundId: newfund.id
         })
 
         res.status(201).send({
@@ -171,6 +145,70 @@ exports.addFund = async (req, res) => {
             message: "internal server error"
         })
     }
+}
+
+exports.detailFund = async (req, res) => {
+    const {id} = req.params
+
+    try {
+        const data = await fund.findOne({            
+            where: {id},
+            include: [
+                {
+                    model: userDonate,
+                    as: "userDonate",
+                    include : [{
+                        model: user,
+                        as: "user",  
+                    }]
+                }
+            ],
+            attributes: {
+                exclude: ['createdAt', 'updatedAt']
+            }
+        })
+
+        if(!data) {
+            return res.status(404).send({
+                status: "failed",
+                message: "fund not found",
+            })
+        }
+
+        let restData =[]
+        let dataFund = {
+            id: data.id,
+            title: data.title,
+            thumbnail: data.thumbnail,
+            goal: data.goal,
+            description: data.description,
+            usersDonate: []
+        };
+        data.userDonate.map(donate => {
+            dataFund.usersDonate.push({
+                id: donate.id,
+                fullName: donate.user.fullName,
+                email: donate.user.email,
+                donateAmount: donate.donateAmount,
+                status: donate.status,
+                proofAttachment: donate.proofAttachment
+            })
+        })
+        restData.push(dataFund)
+
+        res.status(200).send({
+            status: "success",
+            data: {fund: restData}
+        }); 
+         
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            status: "error",
+            message: "internal server error"
+        })
+    }
+
 }
 
 exports.editFund = async (req, res) => {
@@ -237,6 +275,7 @@ exports.editFund = async (req, res) => {
     }
 }
 
+
 exports.deleteFund = async (req, res) => {
     const {id} = req.params
     try {
@@ -264,15 +303,15 @@ exports.deleteFund = async (req, res) => {
     }
 }
 
+
 exports.editDonateFund = async (req, res) => {
-    const {fundId, userId} = req.params
+    const {fundId, userDonateId} = req.params
     const dataInput = req.body
     try {
-
         const donateExist = await userDonate.findOne({
             where: {
+                id: userDonateId,
                 fundId : fundId,
-                userId: userId
             }
         })
 
@@ -285,35 +324,36 @@ exports.editDonateFund = async (req, res) => {
 
         await userDonate.update(dataInput,{
             where: {
+                id: userDonateId,
                 fundId : fundId,
-                userId: userId
             }
         })
 
-        let data = await fund.findOne({
-            where: {
-                id: fundId
-            },            
+        const data = await fund.findOne({            
+            where: {id : fundId},
             include: [
                 {
-                    model: user,
-                    as: "users",  
-                    through: {
-                        model: userDonate,
-                        as: "userDonate",
-                        attributes: {
-                            exclude: ['userId','fundId','createdAt', 'updatedAt']
-                        },
-                      },     
-                    attributes: {
-                        exclude: ['password','createdAt', 'updatedAt']
-                    }
+                    model: userDonate,
+                    as: "userDonate",
+                    include : [{
+                        model: user,
+                        as: "user",  
+                    }]
                 }
             ],
             attributes: {
                 exclude: ['createdAt', 'updatedAt']
             }
         })
+
+        if(!data) {
+            return res.status(404).send({
+                status: "failed",
+                message: "fund not found",
+            })
+        }
+
+        let restData =[]
         let dataFund = {
             id: data.id,
             title: data.title,
@@ -322,22 +362,22 @@ exports.editDonateFund = async (req, res) => {
             description: data.description,
             usersDonate: []
         };
-        data.users.map(user => {
+        data.userDonate.map(donate => {
             dataFund.usersDonate.push({
-                id: user.id,
-                fullName: user.fullName,
-                email: user.email,
-                donateAmount: user.userDonate.donateAmount,
-                status: user.userDonate.status,
-                proofAttachment: user.userDonate.proofAttachment
+                id: donate.id,
+                fullName: donate.user.fullName,
+                email: donate.user.email,
+                donateAmount: donate.donateAmount,
+                status: donate.status,
+                proofAttachment: donate.proofAttachment
             })
         })
-        
+        restData.push(dataFund)
+
         res.status(200).send({
             status: "success",
-            data: dataFund
-        }); 
-
+            data: restData
+        });
     } catch (error) {
         console.log(error)
         res.status(500).send({
@@ -349,13 +389,16 @@ exports.editDonateFund = async (req, res) => {
 
 exports.addUserDonate = async( req, res) => {
     const {fundId, userId} = req.params
-    const data = req.body
     const schema = Joi.object({
         fundId: Joi.number().required(),
         userId: Joi.number().required(),
         donateAmount: Joi.number().min(3).required(),
     })
-    const {error} = schema.validate(data)
+    const {error} = schema.validate({
+        fundId,
+        userId,
+        donateAmount:req.body.donateAmount
+    })
 
     if(error) {
         return res.status(400).send({
@@ -364,17 +407,61 @@ exports.addUserDonate = async( req, res) => {
         })
     }
     try {
-        const data = userDonate.create({
+        userDonate.create({
             fundId,
             userId,
             donateAmount: req.body.donateAmount,
             proofAttachment: req.file.filename
-
         })
-        
+
+        const data = await fund.findOne({            
+            where: {id : fundId},
+            include: [
+                {
+                    model: userDonate,
+                    as: "userDonate",
+                    include : [{
+                        model: user,
+                        as: "user",  
+                    }]
+                }
+            ],
+            attributes: {
+                exclude: ['createdAt', 'updatedAt']
+            }
+        })
+
+        if(!data) {
+            return res.status(404).send({
+                status: "failed",
+                message: "fund not found",
+            })
+        }
+
+        let restData =[]
+        let dataFund = {
+            id: data.id,
+            title: data.title,
+            thumbnail: data.thumbnail,
+            goal: data.goal,
+            description: data.description,
+            usersDonate: []
+        };
+        data.userDonate.map(donate => {
+            dataFund.usersDonate.push({
+                id: donate.id,
+                fullName: donate.user.fullName,
+                email: donate.user.email,
+                donateAmount: donate.donateAmount,
+                status: donate.status,
+                proofAttachment: donate.proofAttachment
+            })
+        })
+        restData.push(dataFund)
+
         res.status(201).send({
             status: "success",
-            data
+            data: restData
         })
     } catch (error) {
         console.log(error)
@@ -384,9 +471,3 @@ exports.addUserDonate = async( req, res) => {
         })          
     }
 }
-
-
-
-
-
-
