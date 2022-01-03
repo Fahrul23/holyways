@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Button from '../../Components/Button'
 import CardDonate from '../../Components/Card/CardDonate';
 import Navbar from '../../Components/Navbar'
 import './raisefund.scss';
 import {Link} from 'react-router-dom';
 import { API } from '../../config/api';
+import { UserContext } from '../../context/UserContext';
 
 function RaiseFund() {
     const [dataFund, setDataFund] = useState([])
+    const [state] = useContext(UserContext)
     
     const config = {
         Headers: {
             "Content-type" : "aplication/json"
         }
     }
+
+    const getFunds = async () => {
+        let response = await API.get(`funds/${state.user.id}`, config)
+        setDataFund(response.data.data.funds)
+    }
     
     useEffect(() => {
         getFunds()
     }, [])
-
-    const getFunds = async () => {
-        let response = await API.get('funds', config)
-        setDataFund(response.data.data.funds)
-    }
     return (
         <div>
             <Navbar />
