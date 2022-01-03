@@ -1,40 +1,30 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('userDonates', {
+    await queryInterface.createTable('userFunds', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fundId: {
-        type: Sequelize.INTEGER,
-        references: {
-            model: 'funds',
-            key: 'id'
-        },
-        onUpdate: "CASCADE",
-        onDelete: 'CASCADE'
-      },
       userId: {
         type: Sequelize.INTEGER,
         references: {
-            model: 'users',
-            key: 'id'
-        },
+            model: "users",
+            key: "id",
+          },
         onUpdate: "CASCADE",
-        onDelete: 'CASCADE'
+        onDelete: "CASCADE",
       },
-      donateAmount: {
-        type: Sequelize.INTEGER
-      },
-      status: {
-        type: Sequelize.STRING,
-        defaultValue: 'pending'
-      },
-      proofAttachment: {
-        type: Sequelize.STRING
+      fundId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: "funds",
+            key: "id",
+          },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
@@ -49,6 +39,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('userDonates');
+    await queryInterface.dropTable('userFunds');
   }
 };
