@@ -18,12 +18,13 @@ function RaiseFund() {
     }
 
     const getFunds = async () => {
-        let response = await API.get(`funds/${state.user.id}`, config)
-        setDataFund(response.data.data.funds)
+        let response = await API.get('fund', config)
+        setDataFund(response.data.data)
     }
     
     useEffect(() => {
         getFunds()
+        console.log("user context :",state)
     }, [])
     return (
         <div>
