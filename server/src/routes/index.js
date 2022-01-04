@@ -18,7 +18,7 @@ router.delete('/user/:id', Auth, deleteUser)
 
 // Funds
 router.get('/funds', getFunds)
-router.get('/funds/:userId',  Auth, getFundsByUserId)
+router.get('/fund',  Auth, getFundsByUserId)
 router.get('/fund/:id',detailFund)
 router.post('/fund', Auth, uploadFile('thumbnail'), addFund)
 router.patch('/fund/:id', Auth, uploadFile('thumbnail'), editFund)

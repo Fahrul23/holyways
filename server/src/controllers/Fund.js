@@ -57,10 +57,10 @@ exports.getFunds = async (req, res) => {
 }
 
 exports.getFundsByUserId =async (req, res) => {
-    const {userId} = req.params
+    const {id} = req.user
     try {
         const data = await user.findOne({
-            where: {id: userId},            
+            where: {id},            
             include: [
                 {
                     model: fund,
