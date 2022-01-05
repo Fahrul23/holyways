@@ -198,7 +198,7 @@ exports.detailFund = async (req, res) => {
 
         res.status(200).send({
             status: "success",
-            data: {fund: restData}
+            data: restData
         }); 
          
     } catch (error) {
@@ -407,7 +407,7 @@ exports.addUserDonate = async( req, res) => {
         })
     }
     try {
-        userDonate.create({
+        await userDonate.create({
             fundId,
             userId,
             donateAmount: req.body.donateAmount,

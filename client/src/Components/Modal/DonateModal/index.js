@@ -5,7 +5,6 @@ import Input from '../../Input';
 import Button from '../../Button';
 import donateImg from '../../../assets/image/donate-1.png'
 import './donatemodal.scss';
-import { API } from '../../../config/api';
 
 const modalStyles = { 
     overlay :{
@@ -26,50 +25,8 @@ const modalStyles = {
 
 
 function DonateModal(props) {
-    const {isOpen,closeModal,fundId,userId} = props
-    const [preview, setPreview] = useState('')
-    const [form, setForm] = useState({
-        donateAmount: "",
-        proofAttachment: "",
-    })
-
-    const handleChange = (e) => {
-        setForm({
-          ...form,
-          [e.target.name]: e.target.type === "file" ? e.target.files : e.target.value,
-        });
-        // Create image url for preview
-        if (e.target.type === "file") {
-            let url = URL.createObjectURL(e.target.files[0]);
-            setPreview(url);
-        }
+    const {isOpen,closeModal,handleChange, handleSubmit, preview} = props
     
-    };
-    
-
-    const handleSubmit =async (e) => {
-        try {
-            e.preventDefault();
-            const config = {
-                Headers: {
-                  "Content-type": "multipart/form-data"
-                }
-            }
-            const formData = new FormData()
-            formData.set("fundId",parseInt(fundId))
-            formData.set("userId", parseInt(userId))
-            formData.set("donateAmount", form.donateAmount)
-            formData.set("proofAttachment", form.proofAttachment[0], form.proofAttachment[0].name)
-
-      
-            const response = await API.post(`fund/${fundId}/${userId}`,formData,config)
-            console.log(response)
-            closeModal()
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     return (
         <Modal isOpen={isOpen} onRequestClose={() => closeModal()}
