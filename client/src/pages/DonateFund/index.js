@@ -105,7 +105,7 @@ const DonateFund = () => {
                 <p className="load-more">Load More</p>
             </div>
             <ApproveModal isOpen={modalApprove} closeModal={closeModalApprove} />
-            <DonateModal isOpen={modalDonate} closeModal={closeModalDonate} />
+            <DonateModal isOpen={modalDonate} closeModal={closeModalDonate}  fundId={dataFund.id}/>
         </div>
     )
 }
