@@ -504,3 +504,47 @@ exports.detailUserDonate = async (req, res) => {
         })
     }
 }
+
+exports.getUsersDonate = async (req, res) => {
+    const {userId} = req.params
+    try {
+        const donateExist = await userDonate.findAll({
+            where: {
+                userId: userId,
+            },
+            include: [{
+                model: fund,
+                as:'fund'
+            }]
+        })
+
+        if(!donateExist) {
+            return res.status(404).send({
+                status: "error",
+                message: "fund not found"
+            })   
+        }
+        let restData =[]
+        donateExist.map(donate => {
+            let donateData = {
+                id: donate.id,
+                title: donate.fund.title,
+                date: donate.createdAt,
+                amount: donate.donateAmount,
+                status: donate.status,
+            };
+            restData.push(donateData)
+        })
+        res.status(201).send({
+            status: "success",
+            data: restData
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            status: "failed",
+            message: "internal server error"
+        })
+    }
+}
