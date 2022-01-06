@@ -65,14 +65,8 @@ exports.getFundsByUserId =async (req, res) => {
                 {
                     model: fund,
                     as: "funds",
-                    attributes: {
-                        exclude: ['createdAt', 'updatedAt']
-                    }
                 }
             ],
-            attributes: {
-                exclude: ['createdAt', 'updatedAt']
-            }
         })
         
         if(!data) {
@@ -163,9 +157,6 @@ exports.detailFund = async (req, res) => {
                     }]
                 }
             ],
-            attributes: {
-                exclude: ['createdAt', 'updatedAt']
-            }
         })
 
         if(!data) {
@@ -191,7 +182,8 @@ exports.detailFund = async (req, res) => {
                 email: donate.user.email,
                 donateAmount: donate.donateAmount,
                 status: donate.status,
-                proofAttachment: donate.proofAttachment
+                proofAttachment: donate.proofAttachment,
+                date: donate.createdAt
             })
         })
         restData.push(dataFund)
@@ -469,5 +461,46 @@ exports.addUserDonate = async( req, res) => {
             status: "failed",
             message: "internal server error"
         })          
+    }
+}
+
+exports.detailUserDonate = async (req, res) => {
+    const {fundId, userDonateId} = req.params
+    
+    try {
+        const donateExist = await userDonate.findOne({
+            where: {
+                id: userDonateId,
+                fundId : fundId,
+            },
+            include: [{
+                model: user,
+                as:'user'
+            }]
+        })
+
+        if(!donateExist) {
+            return res.status(404).send({
+                status: "error",
+                message: "fund not found"
+            })   
+        }
+        
+        res.status(201).send({
+            status: "success",
+            data: {
+                id : donateExist.id,
+                name : donateExist.user.fullName,
+                amount : donateExist.donateAmount,
+                image: donateExist.proofAttachment                
+            }
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            status: "failed",
+            message: "internal server error"
+        })
     }
 }

@@ -23,17 +23,19 @@ const modalStyles = {
     }
 }
 
-function ApproveModal({isOpen,closeModal}) {
+function ApproveModal({isOpen,closeModal, data, handleSubmit}) {
     return (
         <Modal isOpen={isOpen} onRequestClose={() => closeModal()} style={modalStyles}>
-            <form action="#">
-                <h4 class="name">Zain</h4>
-                <Input type="number" placeholder="Nominal Donation" />
-                <div className="image-file">
-                    <img src={donateImg} alt="image-file" />
-                </div>
-                <Button class="btn btn-full btn-orange" text="Approve"/>
-            </form>
+            {data ? 
+                 <form onSubmit={(e) => handleSubmit(e,data.id)}>
+                     <h4 class="name">{data.name}</h4>
+                     <Input type="readonly" placeholder="Nominal Donation" value={data.amount} />
+                     <div className="image-file">
+                         <img src={`http://localhost:5000/uploads/${data.image}`} alt="image-file" />
+                     </div>
+                     <Button type="submit" class="btn btn-full btn-orange" text="Approve"/>
+                 </form>
+            : <div>Loading</div> }
         </Modal>
     )
 }
