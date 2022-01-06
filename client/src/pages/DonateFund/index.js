@@ -82,7 +82,7 @@ const DonateFund = () => {
     const handleSubmitApprove = async (e,userId) => {
         e.preventDefault();
         try {
-            let response = await API.patch(`/fund/${id}/${userId}`,{'status' : 'finish'}, config)
+            let response = await API.patch(`/fund/${id}/${userId}`,{'status' : 'success'}, config)
             closeModalApprove()
             setChangeData(!changeData)
         } catch (error) {
