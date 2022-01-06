@@ -17,6 +17,7 @@ const Detail = () => {
     const [state] = useContext(UserContext)
     const [preview, setPreview] = useState('')
     const [modalDonate, setModalDonate] = useState(false)
+    const [listDonate, setListDonate] = useState([])
     const [form, setForm] = useState({
         donateAmount: "",
         proofAttachment: "",
@@ -37,6 +38,9 @@ const Detail = () => {
             const response = await API.get(`/fund/${id}`, config)
             setDataFund(response.data.data)
             setTotalDonate(response.data.data[0].usersDonate.length)
+            const dataSuccess = response.data.data[0].usersDonate.filter(donate => donate.status !== "pending")
+            setListDonate(dataSuccess)
+            setTotalDonate(dataSuccess.length)
             closeModalDonate()
         } catch (error) {
             console.log(error)
@@ -53,7 +57,6 @@ const Detail = () => {
             let url = URL.createObjectURL(e.target.files[0]);
             setPreview(url);
         }
-    
     };
 
     const handleSubmit =async (e) => {
@@ -132,14 +135,17 @@ const Detail = () => {
                         </div>
                         <div className="list-donate">
                             <h2>List Donation ({totalDonate})</h2>
-                            {fund.usersDonate && fund.usersDonate.map((data,index) => (
-                                <CardStatusDonate 
-                                    key={index}
-                                    name={data.fullName}
-                                    date={data.date}
-                                    total={data.donateAmount}
-                                />
-                            ))} 
+                            {listDonate && listDonate.map(listDonate => {
+                                return(
+                                    <CardStatusDonate 
+                                        key={listDonate.id}
+                                        isButton={false}
+                                        name={listDonate.fullName}
+                                        date={listDonate.date}
+                                        total={listDonate.donateAmount}     
+                                    />
+                                )
+                            })} 
                         </div> 
                     </div>
                 )

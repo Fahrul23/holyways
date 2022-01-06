@@ -3,15 +3,15 @@ import './cardStatus.scss'
 import propTypes from "prop-types";
 
 const CardStatusDonate = (props) => {
-    const convertDate = (date) =>{
+    
+    const {showModal, isButton, name, date, total, donateId} = props
 
+    const convertDate = (date) =>{
         const dateObject = new Date(date)
         const dateFormat = dateObject.toLocaleString('en-GB', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
-
         return dateFormat;
     }
 
-    const {showModal, isButton, name, date, total} = props
     return (
         <div className="donate-card-status">
             <div className="donate-status-item">
@@ -23,7 +23,7 @@ const CardStatusDonate = (props) => {
                 <div className="donate-action">
                     <button 
                         className="btn btn-small btn-orange" 
-                        onClick={() => showModal()}
+                        onClick={() => showModal(donateId)}
                         >detail</button>
                 </div>
             )}
