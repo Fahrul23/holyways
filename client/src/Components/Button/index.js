@@ -3,10 +3,16 @@ import propTypes from "prop-types";
 import './button.scss'
 
 
-function Button({type,text,...rest}) {
+function Button({type,text,loading,...rest}) {
     return (
         <div>
-            <button type={type ? type : 'button'}  {...rest} >{text}</button>
+            <button 
+                type={type ? type : 'button'}  
+                {...rest}
+            >{text}
+            {loading == true && <i class="fas fa-circle-notch fa-spin"></i> } 
+            
+            </button>
         </div>
     )
 }

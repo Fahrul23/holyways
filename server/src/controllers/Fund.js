@@ -380,7 +380,8 @@ exports.editDonateFund = async (req, res) => {
 }
 
 exports.addUserDonate = async( req, res) => {
-    const {fundId, userId} = req.params
+    const {fundId} = req.params
+    const {id} = req.user
     const schema = Joi.object({
         fundId: Joi.number().required(),
         userId: Joi.number().required(),
@@ -388,7 +389,7 @@ exports.addUserDonate = async( req, res) => {
     })
     const {error} = schema.validate({
         fundId,
-        userId,
+        userId : id,
         donateAmount:req.body.donateAmount
     })
 
@@ -401,7 +402,7 @@ exports.addUserDonate = async( req, res) => {
     try {
         await userDonate.create({
             fundId,
-            userId,
+            userId : id,
             donateAmount: req.body.donateAmount,
             proofAttachment: req.file.filename
         })
@@ -466,7 +467,7 @@ exports.addUserDonate = async( req, res) => {
 
 exports.detailUserDonate = async (req, res) => {
     const {fundId, userDonateId} = req.params
-    
+
     try {
         const donateExist = await userDonate.findOne({
             where: {
@@ -506,11 +507,12 @@ exports.detailUserDonate = async (req, res) => {
 }
 
 exports.getUsersDonate = async (req, res) => {
-    const {userId} = req.params
+    const {id} = req.user
+
     try {
         const donateExist = await userDonate.findAll({
             where: {
-                userId: userId,
+                userId: id,
             },
             include: [{
                 model: fund,

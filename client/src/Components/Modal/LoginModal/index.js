@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import Modal from 'react-modal';
 import propTypes from "prop-types";
 import Input from '../../Input'
@@ -30,6 +30,7 @@ function LoginModal(props) {
     const {showModalRegister, isOpen, closeModal} = props
     const [message, setMessage] = useState('')
     const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -45,6 +46,7 @@ function LoginModal(props) {
         console.log(form)
     }
     const handleSubmit = async (e) => {
+        setLoading(true)
         try {
             e.preventDefault()
 
@@ -56,7 +58,8 @@ function LoginModal(props) {
             
             let response = await API.post('/login', form, config)
 
-            if(response.status === 200){        
+            if(response.status === 200){
+                setLoading(false)        
                 dispatch({
                     type: 'LOGIN_SUCCESS',
                     payload: response.data.data
@@ -65,6 +68,7 @@ function LoginModal(props) {
             }
 
         } catch (error) {
+            setLoading(false)
             setMessage("Login Failed")
         }
     }
@@ -72,6 +76,12 @@ function LoginModal(props) {
         closeModal()
         showModalRegister()
     }
+    
+    useEffect(() => {
+        setTimeout(() => {
+            setMessage('')
+        },4000)
+    },[message])
     return (
         <Modal isOpen={isOpen} onRequestClose={() => closeModal()} style={modalStyles}>
             {message ? <Alert message={message}/> : <div></div>}
@@ -90,7 +100,12 @@ function LoginModal(props) {
                         onChange={handleChange}
                     />
                     <div className="button-submit">
-                        <Button type="submit" className="btn btn-full btn-orange" text="Login"/>
+                        <Button 
+                            type="submit" 
+                            className="btn btn-full btn-orange" 
+                            text="Login"
+                            loading={loading}
+                        />
                     </div>
                     <div className="link">
                         <p onClick={() => toRegister()}>Don't have an account ? Klik <span>Here</span></p>

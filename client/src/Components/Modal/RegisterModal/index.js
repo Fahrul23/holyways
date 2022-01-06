@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Modal from 'react-modal';
 import propTypes from "prop-types";
 import Input from '../../Input';
@@ -30,6 +30,7 @@ function RegisterModal(props) {
     const {isOpen, closeModal, showModalLogin} = props
     const [, dispatch] = useContext(UserContext)
     const [message, setMessage] = useState("")
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -44,7 +45,7 @@ function RegisterModal(props) {
     }
 
     const handleSubmit = async (e) => {
-       
+        setLoading(true)
         try {
             e.preventDefault()
             const config = {
@@ -55,6 +56,7 @@ function RegisterModal(props) {
             let response = await API.post('/register', form, config)
             if(response.status === 201){
                 console.log(response.data.data)
+                setLoading(false)
                 dispatch({
                     type: 'REGISTER_SUCCESS',
                     payload: response.data.data
@@ -67,12 +69,19 @@ function RegisterModal(props) {
         } catch (error) {
             console.log(error.message)
             setMessage("Register Failed")
+            setLoading(false)
         }
     }
     const toLogin = () => {
         closeModal()
         showModalLogin()
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setMessage('')
+        },4000)
+    },[message])
  
     return (
         <Modal isOpen={isOpen} onRequestClose={() => closeModal()} style={modalStyles}>
@@ -99,7 +108,12 @@ function RegisterModal(props) {
                         onChange={handleChange}
                     />
                     <div className="button-submit">
-                        <Button type="submit" className="btn btn-full btn-orange" text="Register"/>
+                        <Button 
+                            type="submit" 
+                            className="btn btn-full btn-orange" 
+                            text="Register"
+                            loading={loading}
+                        />
                     </div>
                 </form>
                 <div className="link">

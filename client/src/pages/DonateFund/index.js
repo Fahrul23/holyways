@@ -23,6 +23,7 @@ const DonateFund = () => {
     const [detailDonateData, setDetailDonateData] = useState([])
     const [changeData, setChangeData] = useState(false)
     const [preview, setPreview] = useState('')
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         donateAmount: "",
         proofAttachment: "",
@@ -80,12 +81,15 @@ const DonateFund = () => {
     }
 
     const handleSubmitApprove = async (e,userId) => {
-        e.preventDefault();
         try {
+            setLoading(true)
+            e.preventDefault();
             let response = await API.patch(`/fund/${id}/${userId}`,{'status' : 'success'}, config)
             closeModalApprove()
             setChangeData(!changeData)
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
@@ -104,6 +108,7 @@ const DonateFund = () => {
 
     const handleSubmitDonate =async (e) => {
         try {
+            setLoading(true)
             e.preventDefault();
             const config = {
                 Headers: {
@@ -111,17 +116,16 @@ const DonateFund = () => {
                 }
             }
             const formData = new FormData()
-            formData.set("fundId",id)
-            formData.set("userId",state.user.id)
             formData.set("donateAmount", form.donateAmount)
             formData.set("proofAttachment", form.proofAttachment[0], form.proofAttachment[0].name)
 
-            const response = await API.post(`fund/${id}/${state.user.id}`,formData,config)
+            const response = await API.post(`fund/${id}`,formData,config)
             console.log(response)
             closeModalDonate()
             setChangeData(!changeData)
-            
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
@@ -204,6 +208,7 @@ const DonateFund = () => {
                             closeModal={closeModalApprove} 
                             data={detailDonateData}
                             handleSubmit={handleSubmitApprove}
+                            loading={loading}
                         />
                         <DonateModal 
                             isOpen={modalDonate} 
@@ -211,6 +216,7 @@ const DonateFund = () => {
                             handleChange={handleChange}
                             handleSubmit={handleSubmitDonate}
                             preview={preview}
+                            loading={loading}
                         />
                     </div>
                 )
