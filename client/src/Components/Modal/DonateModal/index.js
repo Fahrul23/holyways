@@ -25,9 +25,8 @@ const modalStyles = {
 
 
 function DonateModal(props) {
-    const {isOpen,closeModal,handleChange, handleSubmit, preview} = props
+    const {isOpen,closeModal,handleChange, handleSubmit, preview, loading} = props
     
-
     return (
         <Modal isOpen={isOpen} onRequestClose={() => closeModal()}
         style={{
@@ -76,7 +75,12 @@ function DonateModal(props) {
                     alt="preview"
                   />
               )}
-                <Button type="submit" class="btn btn-full btn-orange" text="Donate"/>
+                <Button 
+                    type="submit" 
+                    class="btn btn-full btn-orange" 
+                    text="Donate"
+                    loading={loading}
+                />
             </form>
         </Modal>
     )

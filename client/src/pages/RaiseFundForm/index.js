@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 function RaiseFundForm() {
     const [preview, setPreview] = useState('')
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const [form, setForm] = useState({
         title: "",
@@ -32,6 +33,7 @@ function RaiseFundForm() {
     
 
     const handleSubmit =async (e) => {
+        setLoading(true)
         try {
             e.preventDefault();
             const config = {
@@ -47,7 +49,9 @@ function RaiseFundForm() {
             
             const response = await API.post(`fund`,formData,config)
             navigate('/raisefund')
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
@@ -90,7 +94,12 @@ function RaiseFundForm() {
                             name="description"
                             onChange={handleChange}
                         />
-                        <Button type="submit" className="btn btn-medium btn-orange" text="Public Fundraising" />
+                        <Button 
+                            type="submit" 
+                            className="btn btn-medium btn-orange" 
+                            text="Public Fundraising"
+                            loading={loading} 
+                        />
                     </form>
                 </div>
             </div>

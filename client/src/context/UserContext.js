@@ -16,14 +16,16 @@ const reducer = (state,action) => {
             localStorage.setItem("token", payload.user.token);
             return {
                 isLogin: true,
-                user: payload,
+                name: payload.user.fullName,
+                email: payload.user.email,
             };
         
         case "USER_SUCCESS":
             localStorage.setItem("token", payload.token);
             return {
                 isLogin: true,
-                user: payload,
+                name: payload.fullName,
+                email: payload.email,
             };
         case "AUTH_ERROR":
         case "LOGOUT":

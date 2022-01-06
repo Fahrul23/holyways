@@ -104,6 +104,7 @@ exports.Register = async (req, res) => {
             status: "success",
             data: {user: {
                 fullName: newUser.fullName,
+                email: newUser.email,
                 token
             }}
         })

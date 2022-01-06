@@ -23,7 +23,7 @@ const modalStyles = {
     }
 }
 
-function ApproveModal({isOpen,closeModal, data, handleSubmit}) {
+function ApproveModal({isOpen,closeModal, data, handleSubmit, loading}) {
     return (
         <Modal isOpen={isOpen} onRequestClose={() => closeModal()} style={modalStyles}>
             {data ? 
@@ -33,7 +33,12 @@ function ApproveModal({isOpen,closeModal, data, handleSubmit}) {
                      <div className="image-file">
                          <img src={`http://localhost:5000/uploads/${data.image}`} alt="image-file" />
                      </div>
-                     <Button type="submit" class="btn btn-full btn-orange" text="Approve"/>
+                     <Button 
+                        type="submit" 
+                        class="btn btn-full btn-orange" 
+                        text="Approve"
+                        loading={loading}
+                    />
                  </form>
             : <div>Loading</div> }
         </Modal>
