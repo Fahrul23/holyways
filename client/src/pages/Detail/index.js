@@ -18,6 +18,7 @@ const Detail = () => {
     const [preview, setPreview] = useState('')
     const [modalDonate, setModalDonate] = useState(false)
     const [listDonate, setListDonate] = useState([])
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         donateAmount: "",
         proofAttachment: "",
@@ -43,6 +44,7 @@ const Detail = () => {
             setListDonate(dataSuccess)
             setTotalDonate(dataSuccess.length)
             closeModalDonate()
+            console.log("User Id State",state.user.id)
         } catch (error) {
             console.log(error)
         }
@@ -64,6 +66,7 @@ const Detail = () => {
         if(state.isLogin === false){
             navigate("/");
         }
+        setLoading(true)
         try {
             e.preventDefault();
             const config = {
@@ -72,24 +75,23 @@ const Detail = () => {
                 }
             }
             const formData = new FormData()
-            formData.set("fundId",id)
-            formData.set("userId",state.user.id)
             formData.set("donateAmount", form.donateAmount)
             formData.set("proofAttachment", form.proofAttachment[0], form.proofAttachment[0].name)
-
-            const response = await API.post(`fund/${id}/${state.user.id}`,formData,config)
+            
+            const response = await API.post(`fund/${id}`,formData,config)
             console.log(response)
             closeModalDonate()
             setChangeData(!chageData)
-            
+            setLoading(false)
+            setPreview('')
         } catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
 
     useEffect(() => {
         detailFund()
-        
      }, [chageData,id])
 
     return (
@@ -133,6 +135,7 @@ const Detail = () => {
                                         handleChange={handleChange}
                                         handleSubmit={handleSubmit}
                                         preview={preview}
+                                        loading={loading}
                                     />
                                 </div>
                             </div>

@@ -12,9 +12,9 @@ const Profile = () => {
     const [listHistoryDonate, setListHistoryDonate] = useState([])
     const getHistoryDonates = async () => {
         try {
-            let response = await API.get(`/donates/${state.user.id}`)
+            let response = await API.get('/donates')
             setListHistoryDonate(response.data.data)
-            console.log("history donate", listHistoryDonate)
+            console.log("state user", state)
         } catch (error) {
             console.log(error)
         }
@@ -37,11 +37,11 @@ const Profile = () => {
                         <div className="profile-item">
                             <div className="item">
                                 <p className="label">Full Name</p>
-                                <p className="text">{state.user.name}</p>
+                                <p className="text">{state.name}</p>
                             </div>
                             <div className="item">
                                 <p className="label">Email</p>
-                                <p className="text">{state.user.email}</p>
+                                <p className="text">{state.email}</p>
                             </div>
                             <div className="item">
                                 <p className="label">Phone</p>
