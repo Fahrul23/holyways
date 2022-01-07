@@ -6,7 +6,7 @@ import CardStatusDonate from '../../Components/Card/CardStatusDonate';
 import DonateModal from '../../Components/Modal/DonateModal';
 import Button from '../../Components/Button';
 import ListDonate from '../../Components/DummyData/ListDonate';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { API } from '../../config/api';
 import { UserContext } from '../../context/UserContext';
 
@@ -22,7 +22,8 @@ const Detail = () => {
         donateAmount: "",
         proofAttachment: "",
     })
-
+    let navigate = useNavigate();
+    
     const {id} = useParams()
     const closeModalDonate = () => {
         setModalDonate(false)
@@ -60,6 +61,9 @@ const Detail = () => {
     };
 
     const handleSubmit =async (e) => {
+        if(state.isLogin === false){
+            navigate("/");
+        }
         try {
             e.preventDefault();
             const config = {
