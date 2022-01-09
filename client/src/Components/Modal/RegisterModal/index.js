@@ -27,7 +27,7 @@ const modalStyles = {
 }
 
 function RegisterModal(props) {
-    const {isOpen, closeModal, showModalLogin} = props
+    const {isOpen, closeModal, showModalLogin, setChange} = props
     const [, dispatch] = useContext(UserContext)
     const [message, setMessage] = useState("")
     const [loading, setLoading] = useState(false)
@@ -62,6 +62,7 @@ function RegisterModal(props) {
                     payload: response.data.data
                 })
                 closeModal()
+                setChange(true)
             }else if(response.status === 400){
                 console.log(response)            
             }

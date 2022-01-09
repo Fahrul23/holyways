@@ -27,7 +27,7 @@ const modalStyles = {
 }
 
 function LoginModal(props) {
-    const {showModalRegister, isOpen, closeModal} = props
+    const {showModalRegister, isOpen, closeModal, setChange} = props
     const [message, setMessage] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -65,6 +65,7 @@ function LoginModal(props) {
                     payload: response.data.data
                 })
                 closeModal()
+                setChange(true)
             }
 
         } catch (error) {

@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react'
 import './Navbar.scss'
 import logo from '../../assets/icon/Icon.png';
-import user from '../../assets/icon/user.png';
+import userIcon from '../../assets/icon/user.png';
 import money from '../../assets/icon/money.png';
 import logout from '../../assets/icon/logout.png';
 import Button from '../Button';
@@ -11,6 +11,7 @@ import RegisterModal from '../Modal/RegisterModal';
 import LoginModal from '../Modal/LoginModal';
 import {Link} from "react-router-dom"
 import { UserContext } from '../../context/UserContext';
+import { API } from '../../config/api';
 
 Modal.setAppElement('#root')
 
@@ -20,6 +21,8 @@ const Navbar = () => {
     const [ModalRegister, setModalRegister] = useState(false)
     const [ModalLogin, setModalLogin] = useState(false)
     const [dropdown, setDropdown] = useState(false)
+    const [user, setUser] = useState([])
+    const [change, setChange] = useState(false)
 
     const showModalRegister = () => {
         setModalRegister(true)
@@ -37,6 +40,16 @@ const Navbar = () => {
     const handleLogout = () => {
         dispatch({type: 'LOGOUT'})
     }
+
+    const getUser = async() => {
+        try {
+            let response = await API.get('/user')
+            setUser(response.data.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const dropdownActive = dropdown === true ? "active" : "non-active"
 
     useEffect(() => {
@@ -44,6 +57,10 @@ const Navbar = () => {
         closeModalRegister()
         setDropdown(false)
     },[state.isLogin])
+
+    useEffect(() => {
+        getUser()
+    },[change])
 
     return (
         <div className="navbar">
@@ -60,7 +77,7 @@ const Navbar = () => {
                     </div>
                     :
                     <div className="avatar" onClick={() => {setDropdown(!dropdown)}}>
-                        <img src={profile} alt="profile" />
+                        <img src={user.image ? `http://localhost:5000/uploads/${user.image}` : profile} alt="profile" />
                     </div>
                 }
             </div>
@@ -72,7 +89,7 @@ const Navbar = () => {
                     <div className="item-wrapper active">
                         <div className="item">
                             <div className="icon">
-                                <img src={user} alt="user" />
+                                <img src={userIcon} alt="user" />
                             </div>
                             <Link to="/profile">
                                 <p>Profile</p>
@@ -96,9 +113,18 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
-            <RegisterModal isOpen={ModalRegister} closeModal={closeModalRegister} showModalLogin={showModalLogin}/>
-            <LoginModal isOpen={ModalLogin} closeModal={closeModalLogin} showModalRegister={showModalRegister}/>
-
+            <RegisterModal 
+                isOpen={ModalRegister} 
+                closeModal={closeModalRegister} 
+                showModalLogin={showModalLogin}
+                setChange={setChange}
+            />
+            <LoginModal 
+                isOpen={ModalLogin} 
+                closeModal={closeModalLogin} 
+                showModalRegister={showModalRegister}
+                setChange={setChange}
+            />
         </div>
     )
 }
