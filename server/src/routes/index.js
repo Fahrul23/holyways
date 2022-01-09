@@ -1,7 +1,7 @@
 const express = require('express');
 const{ Login, Register, checkAuth } = require('../controllers/Auth');
 const {getFundsByUserId, detailUserDonate, addUserDonate, addFund, editFund, deleteFund, editDonateFund, getFunds, detailFund, getUsersDonate } = require('../controllers/Fund');
-const {getUsers, deleteUser} = require('../controllers/User');
+const {getUsers, deleteUser, editProfile, detailUser} = require('../controllers/User');
 const {Auth} = require('../middlewares/Auth')
 const {uploadFile} = require('../middlewares/uploadFile')
 const router = express.Router()
@@ -11,9 +11,11 @@ const router = express.Router()
 router.get('/check-auth',Auth, checkAuth)
 router.post('/login', Login)
 router.post('/register', Register)
+router.put('/edit-profile', Auth, uploadFile('image'), editProfile)
 
 // Users
 router.get('/users', Auth, getUsers)
+router.get('/user', Auth, detailUser)
 router.delete('/user/:id', Auth, deleteUser)
 
 // Funds

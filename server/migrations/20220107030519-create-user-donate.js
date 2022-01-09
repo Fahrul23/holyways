@@ -1,12 +1,21 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('userFunds', {
+    await queryInterface.createTable('userDonates', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      fundId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: "funds",
+            key: "id",
+          },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -17,14 +26,15 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      fundId: {
-        type: Sequelize.INTEGER,
-        references: {
-            model: "funds",
-            key: "id",
-          },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+      donateAmount: {
+        type: Sequelize.INTEGER
+      },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "pending"
+      },
+      proofAttachment: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -39,6 +49,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('userFunds');
+    await queryInterface.dropTable('userDonates');
   }
 };

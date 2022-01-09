@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   userFund.init({
-    userId: DataTypes.INTEGER,
-    fundId: DataTypes.INTEGER
+    fundId: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'userFund',
