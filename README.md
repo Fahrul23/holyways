@@ -1,4 +1,4 @@
-<img width="1920" alt="cover-holyways" src="https://user-images.githubusercontent.com/53459506/153134613-756de898-9a5b-4ebf-86eb-32fa01043b46.png">
+<img width="1920" alt="cover-holyways" src="https://user-images.githubusercontent.com/53459506/153134862-58ec8208-1dce-4d25-a5f0-d9a6401e3e2c.png">
 
 # Technology Used
 ```
